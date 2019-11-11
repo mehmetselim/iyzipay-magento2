@@ -50,6 +50,8 @@ class IyzicoCheckoutForm extends \Magento\Framework\App\Action\Action
     protected $_storeManager;
     protected $_helper;
     
+    protected $_formKey;
+    
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
         \Magento\Framework\Json\EncoderInterface $encoder,
@@ -68,9 +70,10 @@ class IyzicoCheckoutForm extends \Magento\Framework\App\Action\Action
         \Magento\Framework\Message\ManagerInterface $messageManager,
         \Magento\Checkout\Api\GuestPaymentInformationManagementInterface $guestCartManagement,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Iyzico\Iyzipay\Helper\IyzicoHelper $helper
+        \Iyzico\Iyzipay\Helper\IyzicoHelper $helper,
+		\Magento\Framework\Data\Form\FormKey $formKey
     ) {
-        parent::__construct($context);
+        
         $this->_resultJsonFactory = $resultJsonFactory;
         $this->_pageFactory = $pageFactory;
         $this->_jsonEncoder = $encoder;
@@ -88,6 +91,11 @@ class IyzicoCheckoutForm extends \Magento\Framework\App\Action\Action
         $this->_guestCartManagement = $guestCartManagement;
         $this->_storeManager = $storeManager;
         $this->_helper = $helper;
+	
+		$this->_formKey = $formKey;
+		$this->_request->setParam('form_key', $this->_formKey->getFormKey());
+	
+		parent::__construct($context);
     }
 
     public function execute()
